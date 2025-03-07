@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>お知らせ</title>
+    <link rel="stylesheet" href="result.css" />
+  </head>
+  <body>
+    <h1><a th:href="@{/oshirase}" class="no-underline">お知らせ</a></h1>
+    <form action="/oshirase" method="get" id="dateForm">
+      <div class="form_div">
+        <div>
+          <label class="label_input" for="title">タイトル:</label>
+          <input
+            type="text"
+            id="title"
+            name="title"
+            placeholder="Enter title"
+            oninput="checkInput('title')"
+            th:value="${title}"
+          />
+        </div>
+
+        <div>
+          <label class="label_input" for="category">タイトル区分:</label>
+          <select id="category" name="category">
+            <option value="">--Select an category--</option>
+            <!-- デフォルト：ブランク -->
+            <option
+              th:each="kubunItem : ${allCategory}"
+              th:value="${kubunItem.kubun}"
+              th:text="${kubunItem.displayName}"
+              th:selected="${kubunItem.kubun == category}"
+            ></option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div>
+          <label class="label_input" for="registrationDate">掲載日:</label>
+          <input
+            type="date"
+            id="registrationDate"
+            name="registrationDate"
+            th:value="${registrationDate}"
+          />
+        </div>
+
+        <div>
+          <label class="label_input" for="startDate">適用期間:</label>
+          <input
+            type="date"
+            id="startDate"
+            name="startDate"
+            th:value="${startDate}"
+            style="margin-bottom: 5px"
+          />
+          <label for="endDate">~</label>
+          <input
+            type="date"
+            id="endDate"
+            name="endDate"
+            th:value="${endDate}"
+          />
+        </div>
+
+        <div style="width: 100%">
+          <label for="size-select" class="label_input">検索表示件数：</label>
+          <select class="select_size" name="size" id="size-select">
+            <option value="10" th:selected="${size == 10}">10</option>
+            <!--デフォルト：10行-->
+            <option value="20" th:selected="${size == 20}">20</option>
+            <option value="30" th:selected="${size == 30}">30</option>
+          </select>
+          <button
+            type="submit"
+            class="input_btn_search sub_button_search"
+            id="searchButton"
+          >
+            検索
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <div style="display: flex">
+      <table border="1">
+        <thead>
+          <tr>
+            <th colspan="4">
+              <a>検索結果</a>
+            </th>
+            <th>
+              <a
+                th:if="${currentPage > 0}"
+                th:href="@{/oshirase(page=0, title=${title}, category=${category}, registrationDate=${registrationDate}, startDate=${startDate}, endDate=${endDate})}"
+                style="font-size: 20px; text-decoration: none"
+              >
+                |&NestedLessLess;
+              </a>
+              <a
+                th:if="${currentPage > 0}"
+                th:href="@{/oshirase(page=${currentPage - 1}, title=${title}, category=${category}, registrationDate=${registrationDate}, startDate=${startDate}, endDate=${endDate})}"
+                style="font-size: 20px; text-decoration: none"
+              >
+                &lt;
+              </a>
+              <!-- <span
+              th:text="'Page ' + (${currentPage} + 1) + ' / ' + ${totalPages}"
+            ></span> -->
+              <span
+                th:text="${totalPages > 0} ? 'Page ' + (${currentPage} + 1) + ' / ' + ${totalPages} : 'Page 0 / 0'"
+              ></span>
+              <a
+                th:if="${currentPage < totalPages - 1}"
+                th:href="@{/oshirase(page=${currentPage + 1}, title=${title}, category=${category}, registrationDate=${registrationDate}, startDate=${startDate}, endDate=${endDate})}"
+                style="font-size: 20px; text-decoration: none"
+              >
+                &gt;
+              </a>
+              <a
+                th:if="${currentPage < totalPages - 1}"
+                th:href="@{/oshirase(page=${totalPages - 1}, title=${title}, category=${category}, registrationDate=${registrationDate}, startDate=${startDate}, endDate=${endDate})}"
+                style="font-size: 20px; text-decoration: none"
+              >
+                &NestedGreaterGreater;|
+              </a>
+
+              <span
+                th:utext="'&nbsp;&nbsp;&nbsp;' + ${totalItems} + '件'"
+              ></span>
+            </th>
+          </tr>
+          <tr>
+            <th colspan="2" style="text-indent: 3em">お知らせタイトル</th>
+            <!-- <th>お知らせタイトル</th> -->
+            <th>お知らせ区分</th>
+            <th>掲載日</th>
+            <th>適用期間</th>
+            <!-- <th>id</th> -->
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            th:each="record : ${oshirase}"
+            th:data-id="${record.id}"
+            th:data-title="${record.title}"
+            th:data-category="${record.getDisplayName}"
+            th:data-regdate="${record.regDayforTable}"
+            th:data-startdate="${record.startDayforTable}"
+            th:data-enddate="${record.endDayforTable}"
+            th:data-deleteflg="${record.deleteFlg}"
+            th:data-infomessage="${record.getInfomessage}"
+            th:attr="onclick='handleRowClick(this, event)'"
+            style="cursor: pointer"
+          >
+            <td class="td_1">
+              <input type="radio" name="selectedRecord" value="${record.id}" />
+            </td>
+            <td class="td_2" th:text="${record.title}"></td>
+            <td class="td_3" th:text="${record.getDisplayName}"></td>
+
+            <td class="td_4" th:text="${record.regDayforTable}"></td>
+
+            <td
+              class="td_5"
+              th:text="${record.startDayforTable + ' ~ ' + record.endDayforTable}"
+            ></td>
+            <!-- <td class="td_6" th:text="${record.getInfomessage}"></td> -->
+            <!-- <td th:text="${record.id}"></td> -->
+          </tr>
+          <tr th:if="${oshirase.size() == 0}">
+            <td colspan="6">EXXX2:検索対象が存在しません。</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <table
+        style="margin-left: 10px; border: 1px solid black"
+        class="table_info"
+      >
+        <!-- 表格内容 -->
+        <td>
+          <p id="selected-info">
+            お知らせ内容を表示するには、左側のテーブルから行を選択してください。
+          </p>
+        </td>
+      </table>
+    </div>
+
+    <button class="sub_button_reg" type="button" id="openDialogButton_reg">
+      データ登録
+    </button>
+    <!-- ダイアログ -->
+    <div id="overlay">
+      <div id="registerDialog">
+        <h3>データ登録フォーム</h3>
+        <form th:action="@{/oshirase/register}" method="post" id="registerForm">
+          <input type="hidden" name="searchTitle" th:value="${title}" />
+          <input type="hidden" name="searchCategory" th:value="${category}" />
+          <input
+            type="hidden"
+            name="searchRegistrationDate"
+            th:value="${registrationDate}"
+          />
+          <input type="hidden" name="searchStartDate" th:value="${startDate}" />
+          <input type="hidden" name="searchEndDate" th:value="${endDate}" />
+          <label for="dialogTitle" class="label_input_dia"
+            >タイトル:
+            <span class="required-asterisk">*</span>
+          </label>
+          <input
+            type="text"
+            id="dialogTitle"
+            name="dialogTitle"
+            oninput="checkInput('dialogTitle')"
+            required
+          /><br /><br />
+
+          <label for="dialogCategory" class="label_input_dia"
+            >タイトル区分:
+            <span class="required-asterisk">*</span>
+          </label>
+          <select id="dialogCategory" name="dialogCategory" required>
+            <option value="">--Select an category--</option>
+            <!-- デフォルト：ブランク -->
+            <option
+              th:each="dialogKubunItem : ${allCategory}"
+              th:value="${dialogKubunItem.kubun}"
+              th:text="${dialogKubunItem.displayName}"
+            ></option>
+          </select>
+          <br /><br />
+
+          <label for="dialogInfomessage" class="label_input_dia"
+            >お知らせ内容:
+            <span class="required-asterisk">*</span>
+          </label>
+          <textarea
+            id="dialogInfomessage"
+            name="dialogInfomessage"
+            required
+          ></textarea>
+          <br /><br />
+
+          <label for="dialogRegistrationDate" class="label_input_dia"
+            >掲載日:
+            <span class="required-asterisk">*</span>
+          </label>
+          <input
+            type="date"
+            id="dialogRegistrationDate"
+            name="dialogRegistrationDate"
+            required
+          />
+          <br /><br />
+
+          <label for="dialogStartDate" class="label_input_dia"
+            >適用期間:
+            <span class="required-asterisk">*</span>
+          </label>
+          <input
+            type="date"
+            id="dialogStartDate"
+            name="dialogStartDate"
+            required
+          />
+          <label for="dialogEndDate">~</label>
+          <input
+            type="date"
+            id="dialogEndDate"
+            name="dialogEndDate"
+            class="enddate_input"
+            required
+          />
+          <br /><br />
+          <div class="dia_btn">
+            <button
+              type="submit"
+              id="registerbutton"
+              class="dia_btn_com dia_reg_btn"
+            >
+              登録
+            </button>
+            <button
+              type="button"
+              id="closeDialogButton_reg"
+              class="dia_btn_com dia_close_btn"
+            >
+              閉じる
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <button class="sub_button_upd" type="button" id="openDialogButton_upd">
+      データ変更
+    </button>
+    <!-- ダイアログ -->
+    <div id="overlay_upd">
+      <div id="updateDialog">
+        <h3>データ変更フォーム</h3>
+        <form th:action="@{/oshirase/update}" method="post" id="updateForm">
+          <input type="hidden" name="searchTitle" th:value="${title}" />
+          <!-- <input type="hidden" name="dialogTitle" th:value="${title}" /> -->
+          <input type="hidden" name="searchCategory" th:value="${category}" />
+          <input
+            type="hidden"
+            name="searchRegistrationDate"
+            th:value="${registrationDate}"
+          />
+          <input type="hidden" name="searchStartDate" th:value="${startDate}" />
+          <input type="hidden" name="searchEndDate" th:value="${endDate}" />
+
+          <label for="id_upd" class="label_input_dia">ID:</label>
+          <input type="text" id="id_upd" name="id_upd" readonly />
+          <br /><br />
+
+          <!-- <input type="hidden" id="Id_upd" name="Id_upd" /> -->
+          <label for="dialogTitle_upd" class="label_input_dia"
+            >タイトル:
+            <span class="required-asterisk">*</span>
+          </label>
+          <input
+            type="text"
+            id="dialogTitle_upd"
+            name="dialogTitle_upd"
+            oninput="checkInput('dialogTitle_upd')"
+            required
+          />
+          <br /><br />
+
+          <label for="dialogCategory_upd" class="label_input_dia"
+            >タイトル区分:
+            <span class="required-asterisk">*</span>
+          </label>
+          <select id="dialogCategory_upd" name="dialogCategory_upd" required>
+            <option value="">--Select an category--</option>
+            <!-- デフォルト：ブランク -->
+            <option
+              th:each="dialogKubunItem : ${allCategory}"
+              th:value="${dialogKubunItem.kubun}"
+              th:text="${dialogKubunItem.displayName}"
+            ></option>
+          </select>
+          <br /><br />
+
+          <label for="dialogInfomessage_upd" class="label_input_dia"
+            >お知らせ内容:
+            <span class="required-asterisk">*</span>
+          </label>
+          <textarea
+            id="dialogInfomessage_upd"
+            name="dialogInfomessage_upd"
+            required
+          ></textarea>
+          <br /><br />
+
+          <label for="dialogRegistrationDate_upd" class="label_input_dia"
+            >掲載日:
+            <span class="required-asterisk">*</span>
+          </label>
+          <input
+            type="date"
+            id="dialogRegistrationDate_upd"
+            name="dialogRegistrationDate_upd"
+            required
+          />
+          <br /><br />
+
+          <label for="dialogStartDate_upd" class="label_input_dia"
+            >適用期間:
+            <span class="required-asterisk">*</span>
+          </label>
+          <input
+            type="date"
+            id="dialogStartDate_upd"
+            name="dialogStartDate_upd"
+            required
+          />
+          <label for="dialogEndDate_upd">~</label>
+          <input
+            type="date"
+            id="dialogEndDate_upd"
+            name="dialogEndDate_upd"
+            class="enddate_input"
+            required
+          />
+          <br /><br />
+          <div class="dia_btn">
+            <button
+              type="submit"
+              id="updatebutton"
+              class="dia_btn_com dia_upd_btn"
+            >
+              変更
+            </button>
+            <button
+              type="button"
+              id="closeDialogButton_upd"
+              class="dia_btn_com dia_close_btn"
+            >
+              閉じる
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <button class="sub_button_del" type="button" id="openDialogButton_del">
+      データ削除
+    </button>
+    <!-- ダイアログ -->
+    <div id="overlay_del">
+      <div id="deleteDialog">
+        <h3>I0103:削除してもよろしいですか？</h3>
+        <form th:action="@{/oshirase/delete}" method="post" id="deleteForm">
+          <input type="hidden" name="searchTitle" th:value="${title}" />
+          <input type="hidden" name="searchCategory" th:value="${category}" />
+          <input
+            type="hidden"
+            name="searchRegistrationDate"
+            th:value="${registrationDate}"
+          />
+          <input type="hidden" name="searchStartDate" th:value="${startDate}" />
+          <input type="hidden" name="searchEndDate" th:value="${endDate}" />
+          <input type="hidden" id=" deleteFlg" name="deleteFlg" />
+          <label for="id_del" class="label_input_dia">ID</label>
+          <input type="text" id="id_del" name="id_del" readonly />
+          <br /><br />
+
+          <label for="dialogTitle_del" class="label_input_dia">タイトル</label>
+          <input
+            type="text"
+            id="dialogTitle_del"
+            name="dialogTitle_del"
+            readonly
+          />
+          <br /><br />
+
+          <label for="dialogCategory_del" class="label_input_dia"
+            >タイトル区分:</label
+          >
+          <select id="dialogCategory_del" name="dialogCategory_del" disabled>
+            <option value="">--Select an category--</option>
+            <!-- デフォルト：ブランク -->
+            <option
+              th:each="dialogKubunItem : ${allCategory}"
+              th:value="${dialogKubunItem.kubun}"
+              th:text="${dialogKubunItem.displayName}"
+            ></option>
+          </select>
+          <br /><br />
+
+          <label for="dialogRegistrationDate_del" class="label_input_dia"
+            >掲載日:</label
+          >
+          <input
+            type="date"
+            id="dialogRegistrationDate_del"
+            name="dialogRegistrationDate_del"
+            readonly
+          />
+          <br /><br />
+
+          <label for="dialogStartDate_del" class="label_input_dia"
+            >適用期間:</label
+          >
+          <input
+            type="date"
+            id="dialogStartDate_del"
+            name="dialogStartDate_del"
+            readonly
+          />
+          <label for="dialogEndDate_del">~</label>
+          <input
+            type="date"
+            id="dialogEndDate_del"
+            name="dialogEndDate_del"
+            class="enddate_input"
+            readonly
+          />
+          <br /><br />
+          <div class="dia_btn">
+            <button
+              type="submit"
+              id="submission"
+              class="dia_btn_com dia_del_btn"
+            >
+              はい
+            </button>
+            <button
+              type="button"
+              id="closeDialogButton_del"
+              class="dia_btn_com dia_close_btn"
+            >
+              いいえ
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      //検索
+      const searchButton = document.getElementById("searchButton");
+      const dateForm = document.getElementById("dateForm");
+      const registrationDateInput = document.getElementById("registrationDate");
+      const startDateInput = document.getElementById("startDate");
+      const endDateInput = document.getElementById("endDate");
+
+      //登録
+      const registerbutton = document.getElementById("registerbutton");
+      const registerForm = document.getElementById("registerForm");
+      const dialogRegistrationDate = document.getElementById(
+        "dialogRegistrationDate"
+      );
+      const dialogStartDate = document.getElementById("dialogStartDate");
+      const dialogEndDate = document.getElementById("dialogEndDate");
+
+      //変更
+      const updatebutton = document.getElementById("updatebutton");
+      const updateForm = document.getElementById("updateForm");
+      const dialogRegistrationDate_upd = document.getElementById(
+        "dialogRegistrationDate_upd"
+      );
+      const dialogStartDate_upd = document.getElementById(
+        "dialogStartDate_upd"
+      );
+      const dialogEndDate_upd = document.getElementById("dialogEndDate_upd");
+
+      // 年月日チェック
+      function isValidDate(dateString) {
+        // 正規表現で年月日チェック　YYYY-MM-DD
+        const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+
+        if (!datePattern.test(dateString)) {
+          return false; // フォーマットエラー
+        }
+
+        // 年月日分割
+        const parts = dateString.split("-");
+        const year = parseInt(parts[0], 10);
+        const month = parseInt(parts[1], 10);
+        const day = parseInt(parts[2], 10);
+
+        //年月日チェック
+        const date = new Date(year, month - 1, day);
+        return (
+          date.getFullYear() === year &&
+          date.getMonth() === month - 1 &&
+          date.getDate() === day
+        );
+      }
+
+      // 検索ボタン日付チェック
+      searchButton.addEventListener("click", function (event) {
+        const registrationDateValue = registrationDateInput.value;
+        const startDateValue = startDateInput.value;
+        const endDateValue = endDateInput.value;
+
+        console.log("Registration Date:", registrationDateValue);
+        console.log("Start Date:", startDateValue);
+        console.log("End Date:", endDateValue);
+
+        // 入力値があるテキストボックスをチェック
+        if (registrationDateValue && !isValidDate(registrationDateValue)) {
+          alert("EXXXX4:掲載日に入力された日時の形式が不正です。(YYYY-MM-DD)");
+          event.preventDefault(); // フォームの提出をキャンセル
+          return;
+        }
+
+        if (startDateValue && !isValidDate(startDateValue)) {
+          alert(
+            "EXXXX4:適用開始日に入力された日時の形式が不正です。(YYYY-MM-DD)"
+          );
+          event.preventDefault(); // フォームの提出をキャンセル
+          return;
+        }
+
+        if (endDateValue && !isValidDate(endDateValue)) {
+          alert(
+            "EXXXX4:適用終了日に入力された日時の形式が不正です。(YYYY-MM-DD)"
+          );
+          event.preventDefault(); // フォームの提出をキャンセル
+          return;
+        }
+
+        if (startDateValue && endDateValue) {
+          const startDate = new Date(startDateValue);
+          const endDate = new Date(endDateValue);
+          if (startDate > endDate) {
+            alert("EXXX5:開始日は終了日より遡及することはできません。");
+            event.preventDefault(); // フォームの提出をキャンセル
+            return;
+          }
+        }
+
+        // 年月日問題がなければフォームを提出
+        // dateForm.submit();
+      });
+
+      // 登録ボタン日付チェック
+      registerbutton.addEventListener("click", function (event) {
+        const dialogRegistrationDateValue = dialogRegistrationDate.value;
+        const dialogStartDateValue = dialogStartDate.value;
+        const dialogEndDateValue = dialogEndDate.value;
+
+        // 入力値があるテキストボックスをチェック
+        if (
+          dialogRegistrationDateValue &&
+          !isValidDate(dialogRegistrationDateValue)
+        ) {
+          alert("EXXXX4:掲載日に入力された日時の形式が不正です。(YYYY-MM-DD)");
+          event.preventDefault(); // フォームの提出をキャンセル
+          return;
+        }
+
+        if (dialogStartDateValue && !isValidDate(dialogStartDateValue)) {
+          alert(
+            "EXXXX4:適用開始日に入力された日時の形式が不正です。(YYYY-MM-DD)"
+          );
+          event.preventDefault(); // フォームの提出をキャンセル
+          return;
+        }
+
+        if (dialogEndDateValue && !isValidDate(dialogEndDateValue)) {
+          alert(
+            "EXXXX4:適用終了日に入力された日時の形式が不正です。(YYYY-MM-DD)"
+          );
+          event.preventDefault(); // フォームの提出をキャンセル
+          return;
+        }
+
+        if (dialogStartDateValue && dialogEndDateValue) {
+          const startDate = new Date(dialogStartDateValue);
+          const endDate = new Date(dialogEndDateValue);
+          if (startDate > endDate) {
+            alert("EXXX5:開始日は終了日より遡及することはできません。");
+            event.preventDefault(); // フォームの提出をキャンセル
+            return;
+          }
+        }
+
+        // 年月日問題がなければフォームを提出
+        // registerForm.submit();
+      });
+
+      // 変更ボタン日付チェック
+      updatebutton.addEventListener("click", function (event) {
+        const dialogRegistrationDate_updValue =
+          dialogRegistrationDate_upd.value;
+        const dialogStartDate_updValue = dialogStartDate_upd.value;
+        const dialogEndDate_updValue = dialogEndDate_upd.value;
+
+        // 入力値があるテキストボックスをチェック
+        if (
+          dialogRegistrationDate_updValue &&
+          !isValidDate(dialogRegistrationDate_updValue)
+        ) {
+          alert("EXXXX4:掲載日に入力された日時の形式が不正です。(YYYY-MM-DD)");
+          event.preventDefault(); // フォームの提出をキャンセル
+          return;
+        }
+
+        if (
+          dialogStartDate_updValue &&
+          !isValidDate(dialogStartDate_updValue)
+        ) {
+          alert(
+            "EXXXX4:適用開始日に入力された日時の形式が不正です。(YYYY-MM-DD)"
+          );
+          event.preventDefault(); // フォームの提出をキャンセル
+          return;
+        }
+
+        if (dialogEndDate_updValue && !isValidDate(dialogEndDate_updValue)) {
+          alert(
+            "EXXX4:適用終了日に入力された日時の形式が不正です。(YYYY-MM-DD)"
+          );
+          event.preventDefault(); // フォームの提出をキャンセル
+          return;
+        }
+
+        if (dialogStartDate_updValue && dialogEndDate_updValue) {
+          const startDate = new Date(dialogStartDate_updValue);
+          const endDate = new Date(dialogEndDate_updValue);
+          if (startDate > endDate) {
+            alert("EXXX5:開始日は終了日より遡及することはできません。");
+            event.preventDefault(); // フォームの提出をキャンセル
+            return;
+          }
+        }
+
+        // 年月日問題がなければフォームを提出
+        // updateForm.submit();
+      });
+
+      function updateSelectedRowBackground() {
+        var selectedRadio = document.querySelector(
+          'input[name="selectedRecord"]:checked'
+        );
+        if (selectedRadio) {
+          var selectedRow = selectedRadio.closest("tr");
+
+          // 清除所有行的背景颜色
+          var rows = document.querySelectorAll("tbody tr");
+          rows.forEach(function (r) {
+            r.style.backgroundColor = "";
+          });
+
+          // 将选中行的背景颜色设置为蓝色
+          selectedRow.style.backgroundColor = "#66CCFF";
+
+          var selectedInfoMessage = selectedRow.dataset.infomessage;
+          var infoContainer = document.getElementById("selected-info");
+          if (infoContainer) {
+            infoContainer.textContent = selectedInfoMessage;
+          }
+        }
+      }
+
+      function handleRowClick(row, event) {
+        // ラジオボタンの選択状態を設定
+        var radio = row.querySelector('input[type="radio"]');
+        radio.checked = true;
+
+        updateSelectedRowBackground();
+      }
+
+      // ラジオボタン監視
+      var radios = document.querySelectorAll('input[name="selectedRecord"]');
+      radios.forEach(function (radio) {
+        radio.addEventListener("change", function () {
+          updateSelectedRowBackground();
+        });
+      });
+
+      // 背景色初期化
+      updateSelectedRowBackground();
+
+      // ダイアログの表示と非表示を制御するスクリプト
+      //登録
+      document
+        .getElementById("openDialogButton_reg")
+        .addEventListener("click", function () {
+          document.getElementById("overlay").style.display = "flex";
+        });
+
+      document
+        .getElementById("closeDialogButton_reg")
+        .addEventListener("click", function () {
+          document.getElementById("dialogTitle").value = "";
+          document.getElementById("dialogCategory").value = "";
+          document.getElementById("dialogInfomessage").value = "";
+          document.getElementById("dialogRegistrationDate").value = "";
+          document.getElementById("dialogStartDate").value = "";
+          document.getElementById("dialogStartDate").value = "";
+          document.getElementById("overlay").style.display = "none";
+        });
+
+      //変更
+      document
+        .getElementById("openDialogButton_upd")
+        .addEventListener("click", function () {
+          var selectedRadio = document.querySelector(
+            'input[name="selectedRecord"]:checked'
+          );
+
+          if (selectedRadio) {
+            var selectedRow = selectedRadio.closest("tr");
+            var id = selectedRow.getAttribute("data-id");
+            var title = selectedRow.getAttribute("data-title");
+            var category = selectedRow.getAttribute("data-category");
+            var infomessage = selectedRow.getAttribute("data-infomessage");
+            var regDate = selectedRow.getAttribute("data-regdate");
+            var startDate = selectedRow.getAttribute("data-startdate");
+            var endDate = selectedRow.getAttribute("data-enddate");
+
+            function formatDate(dateString) {
+              var dateParts = dateString.split("/"); // 年月日を「/」でリストに割り込み
+              var year = dateParts[0];
+              var month = dateParts[1] - 1; // avaScript の月が0から始める
+              var day = dateParts[2];
+
+              var date = new Date(Date.UTC(year, month, day));
+
+              // フォーマット yyyy-MM-dd
+              var formattedDate = date.toISOString().slice(0, 10);
+
+              return formattedDate;
+            }
+
+            // データ転送
+            document.getElementById("dialogTitle_upd").value = title;
+
+            var select = document.getElementById("dialogCategory_upd");
+            for (var i = 0; i < select.options.length; i++) {
+              if (select.options[i].text === category) {
+                select.selectedIndex = i;
+                break;
+              }
+            }
+
+            document.getElementById("dialogInfomessage_upd").value =
+              infomessage;
+
+            document.getElementById("dialogRegistrationDate_upd").value =
+              formatDate(regDate);
+            document.getElementById("dialogStartDate_upd").value =
+              formatDate(startDate);
+            document.getElementById("dialogEndDate_upd").value =
+              formatDate(endDate);
+
+            // var radio = row.querySelector('input[type="radio"]');
+            document.getElementById("id_upd").value = id;
+
+            // ダイアログ表示
+            document.getElementById("overlay_upd").style.display = "flex";
+          } else {
+            // 行が選択されていない場合ワーニング表示
+            alert("EXXX1:行を選択してください。");
+            event.preventDefault();
+          }
+        });
+
+      document
+        .getElementById("closeDialogButton_upd")
+        .addEventListener("click", function () {
+          document.getElementById("overlay_upd").style.display = "none";
+        });
+
+      //削除
+      document
+        .getElementById("openDialogButton_del")
+        .addEventListener("click", function () {
+          var selectedRadio = document.querySelector(
+            'input[name="selectedRecord"]:checked'
+          );
+
+          if (selectedRadio) {
+            var selectedRow = selectedRadio.closest("tr");
+            var id = selectedRow.getAttribute("data-id");
+            var title = selectedRow.getAttribute("data-title");
+            var category = selectedRow.getAttribute("data-category");
+            var regDate = selectedRow.getAttribute("data-regdate");
+            var startDate = selectedRow.getAttribute("data-startdate");
+            var endDate = selectedRow.getAttribute("data-enddate");
+
+            function formatDate(dateString) {
+              var dateParts = dateString.split("/"); // 年月日を「/」でリストに割り込み
+              var year = dateParts[0];
+              var month = dateParts[1] - 1; // JavaScript の月が0から始める
+              var day = dateParts[2];
+
+              var date = new Date(Date.UTC(year, month, day));
+
+              // フォーマット yyyy-MM-dd
+              var formattedDate = date.toISOString().slice(0, 10);
+
+              return formattedDate;
+            }
+
+            // データ転送
+            document.getElementById("dialogTitle_del").value = title;
+            var select = document.getElementById("dialogCategory_del");
+            for (var i = 0; i < select.options.length; i++) {
+              if (select.options[i].text === category) {
+                select.selectedIndex = i;
+                break;
+              }
+            }
+            document.getElementById("dialogRegistrationDate_del").value =
+              formatDate(regDate);
+            document.getElementById("dialogStartDate_del").value =
+              formatDate(startDate);
+            document.getElementById("dialogEndDate_del").value =
+              formatDate(endDate);
+
+            // var radio = row.querySelector('input[type="radio"]');
+            document.getElementById("id_del").value = id;
+
+            // ダイアログ表示
+            document.getElementById("overlay_del").style.display = "flex";
+          } else {
+            // 行が選択されていない場合ワーニング表示
+            alert("E0404:行を選択してください。");
+            event.preventDefault();
+          }
+        });
+
+      document
+        .getElementById("closeDialogButton_del")
+        .addEventListener("click", function () {
+          document.getElementById("overlay_del").style.display = "none";
+        });
+
+      // フォーム取得
+      const registerform = document.getElementById("registerForm");
+      const updateform = document.getElementById("updateForm");
+      const deleteform = document.getElementById("deleteForm");
+      // フォーム提出監視
+      registerform.addEventListener("submit", function (event) {
+        event.preventDefault(); // ボタン押下後のフォーム提出を止める
+
+        alert("I1002:処理が完了しました。"); // 提出成功メッセージ
+        registerform.submit(); // フォーム提出
+      });
+
+      updateform.addEventListener("submit", function (event) {
+        event.preventDefault(); // ボタン押下後のフォーム提出を止める
+
+        alert("I1002:処理が完了しました。"); // 提出成功メッセージ
+        updateform.submit(); // フォーム提出
+      });
+
+      deleteform.addEventListener("submit", function (event) {
+        event.preventDefault(); // ボタン押下後のフォーム提出を止める
+
+        alert("I1002:処理が完了しました。"); // 提出成功メッセージ
+        deleteform.submit(); // フォーム提出
+      });
+
+      function checkInput(titleid) {
+        const title = document.getElementById(titleid);
+        // const charCount = document.getElementById("charCount");
+        let inputText = "";
+        if (title != null) {
+          inputText = title.value;
+        }
+
+        let totalLength = 0; // 文字数計算
+        let hankaku = 1;
+        let zenkaku = 2;
+
+        for (let i = 0; i < inputText.length; i++) {
+          const char = inputText[i];
+
+          if (char.match(/[\u0061-\u007A]/)) {
+            totalLength += hankaku; // 小文字
+          } else if (char.match(/[\u0041-\u005A]/)) {
+            totalLength += hankaku; // 大文字
+          } else if (char.match(/[\u0030-\u0039]/)) {
+            totalLength += hankaku; // 数字
+          } else if (char.match(/[\u0020-\u007E]/)) {
+            totalLength += hankaku; // 記号
+          } else {
+            totalLength += zenkaku; // 以外すべて
+          }
+        }
+
+        // 漢字50文字、英数字100文字に制限
+        if (totalLength > 100) {
+          alert(
+            "EXXX3: タイトルは漢字50文字、または半角英数字100文字以内で入力してください。"
+          );
+          title.value = truncateInput(inputText, 100);
+        }
+      }
+      function truncateInput(inputText, maxLength) {
+        let totalLength = 0;
+        let validText = "";
+
+        for (let i = 0; i < inputText.length; i++) {
+          const char = inputText[i];
+          let charLength = 0;
+          let hankaku = 1;
+          let zenkaku = 2;
+
+          if (char.match(/[\u0061-\u007A]/)) {
+            charLength = hankaku; // 大文字
+          } else if (char.match(/[\u0041-\u005A]/)) {
+            charLength = hankaku; // 小文字
+          } else if (char.match(/[\u0030-\u0039]/)) {
+            charLength = hankaku; // 数字
+          } else if (char.match(/[\u0020-\u007E]/)) {
+            charLength = hankaku; // 記号
+          } else {
+            charLength = zenkaku; // 以外すべて
+          }
+
+          if (totalLength + charLength > maxLength) {
+            break;
+          }
+
+          validText += char;
+          totalLength += charLength;
+        }
+        return validText;
+      }
+    </script>
+  </body>
+</html>

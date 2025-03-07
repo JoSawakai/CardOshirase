@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Page</title>
+    <link rel="stylesheet" href="login.css" />
+  </head>
+  <body>
+    <div class="login-container">
+      <div class="login-box">
+        <h2>Login</h2>
+        <form>
+          <div class="input-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required />
+          </div>
+          <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required />
+          </div>
+          <div class="button-group">
+            <button type="button" onclick="window.location.href='/oshirase'">
+              Login
+            </button>
+            <button
+              type="button"
+              class="register-btn"
+              onclick="window.location.href='/cardindex'"
+            >
+              CARDS
+            </button>
+            <button type="button" class="forgot-btn">Forgot Password</button>
+          </div>
+        </form>
+
+        <!-- <script>
+          function goToHomePage() {
+            window.location.href = "/index";
+          }
+        </script> -->
+      </div>
+    </div>
+  </body>
+</html>

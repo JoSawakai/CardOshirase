@@ -1,0 +1,344 @@
+/**
+ * 卡牌页面的样式定义
+ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* 创建一个新的堆叠上下文 */
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: "Microsoft YaHei", Arial, sans-serif;
+  background-color: #f5f5f5;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* 改为flex-start使内容靠上 */
+  min-height: 100vh;
+  color: #333;
+  padding-top: 20px; /* 顶部添加一些内边距 */
+  position: relative; /* 添加相对定位 */
+}
+
+.container {
+  text-align: center;
+  width: 100%;
+  max-width: 1200px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  position: relative; /* 添加相对定位 */
+  z-index: 1; /* 设置基本层级 */
+}
+
+.header {
+  position: relative;
+  margin-bottom: 30px; /* 减小底部边距 */
+  padding-top: 10px; /* 顶部添加一些内边距 */
+  z-index: 1; /* 降低标题的层级为最低 */
+}
+
+h1 {
+  margin-bottom: 10px; /* 减小标题底部边距 */
+  color: #444;
+  font-size: 28px; /* 稍微减小字体大小 */
+  position: relative; /* 创建新的堆叠上下文 */
+  z-index: 1; /* 显式设置最低z-index */
+}
+
+.home-link {
+  position: absolute;
+  top: 10px; /* 调整位置 */
+  left: 0;
+  background-color: #4caf50;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 14px;
+  transition: background-color 0.3s;
+  z-index: 2; /* 保持按钮可点击 */
+}
+
+.home-link:hover {
+  background-color: #45a049;
+}
+
+/* 重置按钮样式 */
+.reset-button {
+  position: absolute;
+  top: 10px; /* 调整位置 */
+  right: 0;
+  background-color: #f44336;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  z-index: 2; /* 保持按钮可点击 */
+}
+
+.reset-button:hover {
+  background-color: #d32f2f;
+}
+
+.reset-button:active {
+  transform: translateY(1px);
+}
+
+.cards-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex: 1; /* 让卡牌容器占据剩余空间 */
+  position: relative; /* 重要：确保这是相对定位 */
+  margin-top: 20px;
+  min-height: 500px; /* 设置最小高度 */
+  padding: 20px;
+  align-items: center; /* 卡牌垂直居中 */
+  border: 1px dashed #ddd; /* 添加边框便于观察容器范围 */
+  background-color: rgba(255, 255, 255, 0.5); /* 轻微背景色 */
+  overflow: visible; /* 修改为visible允许卡牌显示在容器外 */
+  z-index: 1; /* 基础层级 */
+}
+
+/* 水印样式 */
+.instruction-watermark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 0; /* 确保在卡牌下方 */
+  pointer-events: none; /* 使水印不影响鼠标事件 */
+  opacity: 0.15; /* 调低不透明度营造水印效果 */
+}
+
+.watermark-content {
+  text-align: center;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.3); /* 轻微背景 */
+  max-width: 80%;
+  font-size: 16px;
+  color: #333;
+  transform: rotate(0deg);
+}
+
+.watermark-content strong {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+.watermark-content ul {
+  list-style-position: inside;
+  text-align: left;
+}
+
+.watermark-content li {
+  margin: 5px 0;
+}
+
+.card {
+  width: 150px;
+  height: 200px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px; /* 稍微缩小字体，适应更多文本 */
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.3s ease; /* 只对变换应用过渡效果，不影响位置变化 */
+  user-select: none; /* 防止拖动时选中文本 */
+  border: 2px solid #ddd;
+  /* 默认为相对定位，保持原来的排列 */
+  position: relative;
+  z-index: 5; /* 确保在水印上方 */
+  padding: 10px; /* 添加内边距 */
+  text-align: center; /* 文本居中 */
+  word-wrap: break-word; /* 允许文本换行 */
+  overflow: hidden; /* 当内容太多时隐藏溢出部分 */
+}
+
+/* 卡片标题样式 */
+.card-title {
+  font-weight: bold;
+  font-size: 16px;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+/* 卡片详情样式 - 默认隐藏 */
+.card-detail {
+  display: none;
+  font-size: 14px;
+  font-weight: normal;
+  color: #333;
+  text-align: left;
+  line-height: 1.3;
+  width: 100%;
+  max-height: 70%;
+  overflow-y: auto;
+  margin-top: 8px;
+  padding: 5px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 5px;
+}
+
+/* 已经定位过的卡牌使用绝对定位 */
+.card.positioned {
+  position: absolute !important;
+  z-index: 90 !important; /* 确保绝对定位的卡牌总是在最上层 */
+}
+
+/* 鼠标悬停时卡牌放大效果 */
+.card:hover:not(:active) {
+  transform: scale(2.2);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 999 !important; /* 悬停时提高层级 */
+  height: auto; /* 允许高度自动调整以适应内容 */
+  min-height: 200px; /* 保持最小高度 */
+}
+
+/* 鼠标悬停时显示详细内容 */
+.card:hover:not(:active) .card-detail {
+  display: block;
+}
+
+/* 鼠标悬停时卡片标题样式 */
+.card:hover:not(:active) .card-title {
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+
+/* 拖动时的样式 */
+.card.dragging {
+  opacity: 0.9;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+  cursor: grabbing;
+  transform: none !important; /* 拖动时取消任何变换 */
+  transition: none !important; /* 拖动时禁用过渡效果，确保实时跟随 */
+  position: fixed !important; /* 确保固定定位具有最高优先级 */
+  will-change: transform; /* 提示浏览器将来可能有变换，优化性能 */
+  pointer-events: none; /* 确保鼠标事件穿透 */
+  height: 200px !important; /* 固定高度，避免出现内容显示问题 */
+}
+
+/* 拖动时隐藏详细内容 */
+.card.dragging .card-detail {
+  display: none !important;
+}
+
+/* 重置动画样式 */
+.card.reset-animation {
+  animation: card-reset 0.5s ease-in-out;
+  z-index: 9999 !important; /* 确保重置动画期间卡牌在上层 */
+}
+
+@keyframes card-reset {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.2);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    opacity: 1;
+  }
+}
+
+/* 每张卡牌不同的颜色 */
+#card1 {
+  background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+}
+
+#card2 {
+  background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+}
+
+#card3 {
+  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+}
+
+#card4 {
+  background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+}
+
+.detail-content {
+  background: white;
+  border-radius: 10px;
+  width: 80%;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  animation: popup-scale 0.3s ease;
+}
+
+@keyframes popup-scale {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.detail-header {
+  padding: 15px 20px;
+  background: #f8f8f8;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 10px 10px 0 0;
+}
+
+.detail-header h3 {
+  margin: 0;
+  color: #333;
+}
+
+.close-btn {
+  font-size: 24px;
+  color: #888;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.close-btn:hover {
+  color: #f44336;
+}
+
+.detail-body {
+  padding: 20px;
+  line-height: 1.6;
+  color: #333;
+  white-space: pre-line; /* 保留换行符 */
+}

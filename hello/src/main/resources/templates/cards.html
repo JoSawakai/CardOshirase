@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>お知らせカード - Spring Boot 版本</title>
+    <link rel="stylesheet" th:href="@{/css/cards.css}" />
+  </head>
+  <body>
+    <div class="container">
+      <!-- ページのヘッダー -->
+      <div class="header">
+        <a th:href="@{/}" class="home-link">ホームに戻る</a>
+        <h1>インタラクティブカードデモ</h1>
+        <button id="reset-all-cards" class="reset-button">
+          カード位置リセット
+        </button>
+      </div>
+
+      <!-- カードコンテナ - 高さを増加 -->
+      <div class="cards-container">
+        <!-- 使用説明を背景の透かしにする -->
+        <div class="instruction-watermark">
+          <div class="watermark-content">
+            <strong>ユーセージ：</strong>
+            <ul>
+              <li>マウスをカードに重ねるとカードを拡大できます</li>
+              <li>クリックしてドラッグするとカードを移動できます</li>
+              <li>
+                「カード位置リセット」ボタンをクリックするとすべてのカードの位置をリセットできます
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- カードにデータベースの内容を使用 -->
+        <div
+          class="card"
+          id="card1"
+          th:attr="data-card-id=1, data-card-detail=${cardDetails.get('1')}"
+        >
+          <div class="card-title" th:text="${cardContents.get('1')}">
+            カード 1
+          </div>
+          <div class="card-detail" th:text="${cardDetails.get('1')}">
+            カードの詳細...
+          </div>
+        </div>
+        <div
+          class="card"
+          id="card2"
+          th:attr="data-card-id=2, data-card-detail=${cardDetails.get('2')}"
+        >
+          <div class="card-title" th:text="${cardContents.get('2')}">
+            カード 2
+          </div>
+          <div class="card-detail" th:text="${cardDetails.get('2')}">
+            カードの詳細...
+          </div>
+        </div>
+        <div
+          class="card"
+          id="card3"
+          th:attr="data-card-id=3, data-card-detail=${cardDetails.get('3')}"
+        >
+          <div class="card-title" th:text="${cardContents.get('3')}">
+            カード 3
+          </div>
+          <div class="card-detail" th:text="${cardDetails.get('3')}">
+            カードの詳細...
+          </div>
+        </div>
+        <div
+          class="card"
+          id="card4"
+          th:attr="data-card-id=4, data-card-detail=${cardDetails.get('4')}"
+        >
+          <div class="card-title" th:text="${cardContents.get('4')}">
+            カード 4
+          </div>
+          <div class="card-detail" th:text="${cardDetails.get('4')}">
+            カードの詳細...
+          </div>
+        </div>
+
+        <!-- 詳細内容ポップアップ -->
+        <!-- <div id="detail-popup" class="detail-popup">
+          <div class="detail-content">
+            <div class="detail-header">
+              <h3 id="detail-title">カードの詳細</h3>
+              <span class="close-btn">&times;</span>
+            </div>
+            <div id="detail-body" class="detail-body"> -->
+        <!-- ここにJavaScriptで詳細内容を埋める -->
+        <!-- </div>
+          </div>
+        </div> -->
+      </div>
+    </div>
+
+    <!-- JavaScriptファイルをインポート -->
+    <script th:src="@{/js/cards.js}"></script>
+  </body>
+</html>

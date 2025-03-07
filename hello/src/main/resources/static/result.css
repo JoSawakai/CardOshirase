@@ -1,0 +1,466 @@
+h1 {
+  font-size: 24pt;
+  font-weight: bold;
+  margin-top: 30px;
+  margin-left: 40vw;
+}
+
+.no-underline {
+  text-decoration: none;
+  color: inherit;
+}
+
+.no-underline:hover,
+.no-underline:focus,
+.no-underline:active {
+  text-decoration: none;
+  color: inherit;
+}
+
+h3 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  /* background-color: #f0f0f0; */
+  /* margin: 20px; */
+  font-size: 13;
+  margin: 5px 25px;
+}
+
+div {
+  margin-bottom: 10px;
+}
+
+thead,
+tfoot {
+  background-color: rgb(228 240 245);
+}
+
+/* label {
+  display: inline-block;
+  width: 150px;
+  margin-bottom: 10px;
+} */
+label[type="mid"] {
+  display: inline-block;
+  width: 130px;
+  margin-left: 20px;
+  margin-bottom: 10px;
+}
+input[type="text"],
+input[type="date"] {
+  width: 200px;
+  padding: 5px;
+}
+select {
+  width: 214px;
+  padding: 5px;
+}
+
+.select_size {
+  width: 50px;
+  padding: 5px;
+}
+
+.label_input {
+  display: inline-block;
+  width: 150px;
+  margin-bottom: 10px;
+}
+.label_input_dia {
+  display: inline-block;
+  width: 150px;
+  margin-bottom: 10px;
+  margin-left: 50px;
+  vertical-align: top;
+}
+
+.label_kugiri {
+  /* display: inline-block; */
+  margin-bottom: 10px;
+}
+
+button {
+  font-size: 17px;
+  width: 120px;
+  margin-left: 0px;
+}
+
+.sub_button_search {
+  font-size: 17px;
+  width: 130px;
+  margin-left: 120px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: white;
+  border: none;
+  outline: none;
+  box-shadow: 0 0 10px rgba(129, 199, 212, 0.5); /* シャドウ色 */
+  transition: box-shadow 0.3s ease; /* ボタン動画 */
+  background-color: #58b2dc; /* ボタン色 */
+  cursor: pointer;
+}
+.sub_button_search:focus {
+  /*ボタンフォーカス後 */
+  outline: none;
+  box-shadow: 0 0 10px 2px rgba(17, 50, 133, 0.5);
+}
+.sub_button_search:hover {
+  /* マウスがボタンに止めている */
+  box-shadow: 0 0 10px 3px rgba(0, 92, 157, 0.7);
+}
+
+.sub_button_reg {
+  font-size: 17px;
+  width: 130px;
+  /* margin-top: 50px;
+  margin-bottom: 100px; */
+  margin-left: 120px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: white;
+  border: none;
+  outline: none;
+  box-shadow: 0 0 10px rgba(168, 216, 185, 0.8);
+  transition: box-shadow 0.3s ease;
+  background-color: #86c166;
+  cursor: pointer;
+}
+.sub_button_reg:focus {
+  outline: none;
+  box-shadow: 0 0 10px 2px rgba(45, 109, 75, 0.5);
+}
+.sub_button_reg:hover {
+  box-shadow: 0 0 10px 3px rgba(93, 172, 129, 0.8);
+}
+
+.sub_button_upd {
+  font-size: 17px;
+  width: 130px;
+  /* margin-top: 50px;
+  margin-bottom: 100px; */
+  margin-left: 120px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: white;
+  border: none;
+  outline: none;
+  box-shadow: 0 0 10px rgba(250, 214, 127, 0.9);
+  transition: box-shadow 0.3s ease;
+  background-color: #efbb24;
+  cursor: pointer;
+}
+.sub_button_upd:focus {
+  outline: none;
+  box-shadow: 0 0 10px 2px rgba(202, 122, 44, 0.9);
+}
+.sub_button_upd:hover {
+  box-shadow: 0 0 10px 3px rgba(255, 177, 27, 0.8);
+}
+
+.sub_button_del {
+  font-size: 17px;
+  width: 130px;
+  /* margin-top: 50px;
+  margin-bottom: 100px; */
+  margin-left: 120px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: white;
+  border: none;
+  outline: none;
+  box-shadow: 0 0 10px rgba(232, 122, 144, 0.8);
+  transition: box-shadow 0.3s ease;
+  background-color: #cb1b45;
+  cursor: pointer;
+}
+.sub_button_del:focus {
+  outline: none;
+  box-shadow: 0 0 10px 2px rgba(232, 48, 21, 0.5);
+}
+.sub_button_del:hover {
+  box-shadow: 0 0 10px 3px rgba(208, 16, 76, 0.7);
+}
+
+.search-container {
+  margin-bottom: 20px;
+}
+.date-range {
+  display: inline-block;
+  width: 90px;
+}
+.date-range-separator {
+  display: inline-block;
+  padding: 0 10px;
+}
+table {
+  width: 70vw;
+  max-width: 1400px;
+  border-collapse: collapse;
+  margin-top: 0px;
+  margin-bottom: 50px;
+}
+
+@media (max-width: 1000px) {
+  table {
+    width: 100%; /* 画面サイズが1000未満の場合、表示拡大 */
+  }
+}
+
+.table_info {
+  width: 30vw;
+  max-width: 600px;
+  border-collapse: collapse;
+  margin-top: 0px;
+}
+
+th,
+td {
+  padding: 5px;
+  text-align: left;
+}
+
+th {
+  height: 20px;
+  background-color: #f2f2f2;
+}
+
+.td_1 {
+  width: 25px;
+}
+
+.td_2 {
+  width: 30vw;
+}
+
+.td_3 {
+  width: 9vw;
+  max-width: 110px;
+}
+
+.td_4 {
+  width: 20vw;
+  max-width: 130px;
+}
+
+.td_5 {
+  width: 15vw;
+  max-width: 250px;
+}
+
+pre {
+  border: solid 3px #ddd;
+  padding: 10px;
+}
+
+caption {
+  caption-side: bottom;
+  padding: 10px;
+  font-weight: bold;
+}
+
+.th_left {
+  border: 1px solid rgb(160 160 160);
+  text-align: left;
+}
+.th_center {
+  border: 1px solid rgb(160 160 160);
+  text-align: center;
+}
+.pagination {
+  margin-top: 20px;
+  text-align: center;
+}
+.pagination a {
+  margin: 0 5px;
+  padding: 5px 10px;
+  border: 1px solid #ddd;
+  text-decoration: none;
+  color: #333;
+}
+.pagination a.active {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+/* 背景を暗くするオーバーレイ */
+#overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 中央に表示されるダイアログ */
+#registerDialog {
+  position: relative;
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  width: 50vw;
+  max-width: 500px;
+  height: 80%;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+#overlay_upd {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 中央に表示されるダイアログ */
+#updateDialog {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  width: 50vw;
+  max-width: 500px;
+  height: 80%;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+#overlay_del {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 中央に表示されるダイアログ */
+#deleteDialog {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  width: 50vw;
+  max-width: 500px;
+  height: 80%;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.form_div {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 10px;
+}
+
+.input_btn {
+  margin-left: 60vw; /* ボタンを右寄せ */
+  display: block;
+}
+
+.input_btn_search {
+  margin-left: 19.5vw; /* ボタンを右寄せ */
+}
+
+/* ウインドウサイズ適用 */
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.form-row label {
+  min-width: 10px;
+}
+
+.form-row input {
+  flex-grow: 1;
+  min-width: 200px;
+  max-width: 200px;
+}
+
+@media (max-width: 600px) {
+  .form-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.enddate_input {
+  margin-left: 204px;
+}
+
+.dia_btn {
+  position: absolute; /*  ダイアログに対しての位置 */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  gap: 30px;
+  margin-top: 30px;
+}
+
+.dia_btn_com {
+  padding: 5px 20px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  color: white;
+}
+
+.dia_close_btn {
+  background-color: #58b2dc; /* 青い背景色 */
+  box-shadow: 0 4px 8px rgba(129, 199, 212, 0.5); /* 青いシャドウ */
+}
+
+.dia_close_btn:hover {
+  box-shadow: 0 6px 12px rgba(0, 92, 157, 0.7); /* 濃い目シャドウ */
+}
+
+.dia_reg_btn {
+  background-color: #86c166;
+  box-shadow: 0 4px 8px rgba(168, 216, 185, 0.8);
+}
+
+.dia_reg_btn:hover {
+  box-shadow: 0 6px 12px rgba(93, 172, 129, 0.8);
+}
+
+.dia_upd_btn {
+  background-color: #efbb24;
+  box-shadow: 0 4px 8px rgba(250, 214, 127, 0.9);
+}
+
+.dia_upd_btn:hover {
+  box-shadow: 0 6px 12px rgba(255, 177, 27, 0.8);
+}
+
+.dia_del_btn {
+  background-color: #ff4d4d;
+  box-shadow: 0 4px 8px rgba(255, 77, 77, 0.5);
+}
+
+.dia_del_btn:hover {
+  box-shadow: 0 6px 12px rgba(255, 77, 77, 0.7);
+}
+
+textarea {
+  width: 210px;
+  height: 100px;
+}
+
+.required-asterisk {
+  color: red;
+  margin-left: 5px;
+}

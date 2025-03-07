@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Thymeleaf Example</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!-- <link rel="stylesheet" href="../static/result.css" /> -->
+    <style>
+      h1 {
+        font-size: 18pt;
+        font-weight: bold;
+        color: gray;
+      }
+      body {
+        font-size: 13;
+        color: gray;
+        margin: 5px 25px;
+      }
+      pre {
+        border: solid 3px #ddd;
+        padding: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <table>
+      <thead>
+        <tr>
+          <th>お知らせタイトル</th>
+          <th>お知らせ区分</th>
+          <th>掲載日</th>
+          <th>適用期間</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="item : ${items}">
+          <td th:text="${item.title}">サンプルタイトル1</td>
+          <td th:text="${item.category}">区分1</td>
+          <td th:text="${item.publishDate}">2024-09-01</td>
+          <td th:text="${item.startDate} + ' ~ ' + ${item.endDate}">
+            2024-09-01 ~ 2024-09-10
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>
